@@ -1,6 +1,7 @@
 package com.example.googlemaps;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,12 +14,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.bumptech.glide.Glide;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -57,7 +58,6 @@ public class Adapter implements OnMapReadyCallback, GoogleMap.InfoWindowAdapter 
         TextView latitud = (TextView) infoView.findViewById(R.id.txtLatitud);
         TextView longitud = (TextView) infoView.findViewById(R.id.txtLongitud);
         ImageView logo = (ImageView) infoView.findViewById(R.id.imageLogo);
-        String url;
 
         Datos datos = (Datos) marker.getTag();
         nombre.setText(datos.getNombre());
@@ -66,12 +66,14 @@ public class Adapter implements OnMapReadyCallback, GoogleMap.InfoWindowAdapter 
         direccion.setText(datos.getDireccion());
         latitud.setText(datos.getLatitud().toString());
         longitud.setText(datos.getLongitud().toString());
-        url = datos.getLogo();
 
-        Glide.with(Ctx)
-                .load(url)
-                .placeholder(R.drawable.ic_launcher_foreground)
-                .into(logo);
+        try{
+            Picasso.with(Ctx)
+                    .load(datos.getLogo())
+                    .into(logo);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
 
         return infoView;
     }
